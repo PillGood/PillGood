@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">PIllGood</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="current_fragment">Current</string>
+    <string name="past_fragment">Past</string>
 </resources>
