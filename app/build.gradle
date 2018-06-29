@@ -33,4 +33,5 @@ dependencies {
     implementation 'com.naver.maps.open:naver-map-api:2.1.2@aar'
     implementation 'pub.devrel:easypermissions:1.2.0'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
+
 }

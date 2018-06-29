@@ -25,13 +25,13 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto" >
-                <TextView
+                xmlns:app="http://schemas.android.com/apk/res-auto">
+
+                <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/app_name"
-                    android:textSize="16sp"
-                    android:textColor="#FFFFFF"
+                    android:layout_height="25dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/logo"
                     android:layout_gravity="center" />
             </android.support.v7.widget.Toolbar>
 
@@ -49,46 +49,82 @@
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
+        <View
+            android:id="@+id/shade"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="right">
+            android:visibility="gone"
+            android:background="@drawable/shade" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right">
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/mainPlusBtn"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
+                android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="16dp"
                 app:srcCompat="@drawable/ic_add_white_48dp" />
+            <TextView
+                android:id="@+id/qr"
+                android:layout_toLeftOf="@id/mainFastEnrollmentBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:text="@string/action_qr"
+                android:layout_alignBottom="@id/mainFastEnrollmentBtn"
+                android:layout_marginRight="16dp"
+                android:visibility="invisible"
+                android:gravity="right|center_vertical" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/mainFastEnrollmentBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_above="@id/mainPlusBtn"
-                android:layout_centerHorizontal="true"
+                android:layout_above="@id/mainEnrollmentBtn"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="24dp"
                 android:layout_marginBottom="20dp"
+                android:src="@drawable/ic_camera"
                 android:visibility="invisible"
-                app:backgroundTint="@color/colorPrimary"
-                android:src="@drawable/ic_add_white_48dp"
+                app:backgroundTint="#FFFFFF"
                 app:fabSize="mini" />
+
+            <TextView
+                android:id="@+id/manual"
+                android:layout_toLeftOf="@id/mainEnrollmentBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:layout_alignBottom="@id/mainEnrollmentBtn"
+                android:text="@string/action_manual"
+                android:layout_marginRight="16dp"
+                android:visibility="invisible"
+                android:gravity="right|center_vertical" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/mainEnrollmentBtn"
+                android:layout_above="@id/mainPlusBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_above="@id/mainFastEnrollmentBtn"
-                android:layout_centerHorizontal="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="24dp"
                 android:layout_marginBottom="20dp"
+
+                android:src="@drawable/ic_edit"
                 android:visibility="invisible"
-                app:backgroundTint="@color/colorPrimaryDark"
-                android:src="@drawable/ic_add_white_48dp"
+                app:backgroundTint="#FFFFFF"
                 app:fabSize="mini" />
 
+
         </RelativeLayout>
+
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.v7.widget.RecyclerView
