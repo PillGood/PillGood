@@ -1,5 +1,6 @@
 package com.example.pc.pillgood;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +18,8 @@ import android.view.animation.AnimationUtils;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
+import pub.devrel.easypermissions.EasyPermissions;
+
 public class MainActivity extends AppCompatActivity {
     FloatingActionButton plusBtn, fastEnrollmentBtn, enrollmentBtn;
     Boolean plusBtnIsClicked = false;
@@ -24,6 +27,11 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rvNavigation;
     DrawerLayout drawer;
     private Toolbar toolbar;
+    private static final String[] REQUIRED_PERMISSIONS = {Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+    Manifest.permission.ACCESS_COARSE_LOCATION,
+    Manifest.permission.ACCESS_WIFI_STATE,
+    Manifest.permission.CHANGE_WIFI_STATE};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        requestAllPermissions();
 
         ViewPager viewPager =  findViewById(R.id.viewpager);
         MainFragmentAdapter adapter = new MainFragmentAdapter(this, getSupportFragmentManager());
@@ -54,24 +64,23 @@ public class MainActivity extends AppCompatActivity {
         plusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Animation plusBtnAnim, fastEnrollmnetAnim, enrollmentAnim;
+                Animation plusBtnAnim, fastEnrollmentAnim, enrollmentAnim;
                 plusBtnAnim= AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_plusbtn);
                 if (plusBtnIsClicked) {
                     fastEnrollmentBtn.setVisibility(View.INVISIBLE);
                     enrollmentBtn.setVisibility(View.INVISIBLE);
-                    fastEnrollmnetAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_down_fastbtn);
+                    fastEnrollmentAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_down_fastbtn);
                     enrollmentAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_down_enrollmentbtn);
                     plusBtnIsClicked = false;
-                }
-                else {
+                } else {
                     fastEnrollmentBtn.setVisibility(View.VISIBLE);
                     enrollmentBtn.setVisibility(View.VISIBLE);
-                    fastEnrollmnetAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_up_fastbtn);
+                    fastEnrollmentAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_up_fastbtn);
                     enrollmentAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_up_enrollmentbtn);
                     plusBtnIsClicked = true;
                 }
                 plusBtn.startAnimation(plusBtnAnim);
-                fastEnrollmentBtn.startAnimation(fastEnrollmnetAnim);
+                fastEnrollmentBtn.startAnimation(fastEnrollmentAnim);
                 enrollmentBtn.startAnimation(enrollmentAnim);
             }
         });
@@ -112,7 +121,8 @@ public class MainActivity extends AppCompatActivity {
                     case 1:
                         break;
                     case 2:
-
+                        Intent intent=new Intent(getApplicationContext(), MapActivity.class);
+                        startActivity(intent);
                         break;
                     case 3:
 
@@ -131,5 +141,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+    private void requestAllPermissions() {
+        if (EasyPermissions.hasPermissions(this, REQUIRED_PERMISSIONS)) {
+
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, "SDGFSDFSDF", 1, REQUIRED_PERMISSIONS);
+        }
     }
 }

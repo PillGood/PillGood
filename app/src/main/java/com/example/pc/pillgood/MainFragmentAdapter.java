@@ -17,7 +17,9 @@ public class MainFragmentAdapter extends FragmentPagerAdapter {
     // This determines the fragment for each tab
     @Override
     public Fragment getItem(int position) {
-        return new MainFragment();
+        MainFragment fragment=new MainFragment();
+        fragment.setType(position);
+        return fragment;
     }
 
     // This determines the number of tabs

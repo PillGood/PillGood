@@ -15,6 +15,7 @@ public class MainFragment extends Fragment {
     private RecyclerView rvContent;
     private MainRecyclerViewAdapter adapter;
     private ArrayList<EntryContentObject> entryContentObjects =new ArrayList<>();
+    private int type;
 
     public MainFragment() {
         // Required empty public constructor
@@ -23,6 +24,14 @@ public class MainFragment extends Fragment {
     public static MainFragment newInstance(String param1, String param2) {
         MainFragment fragment = new MainFragment();
         return fragment;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getType() {
+        return type;
     }
 
     @Override
@@ -49,7 +58,7 @@ public class MainFragment extends Fragment {
             entryContentObject.setOptions(temp);
             entryContentObjects.add(entryContentObject);
         }
-        adapter=new MainRecyclerViewAdapter(getContext(), entryContentObjects);
+        adapter=new MainRecyclerViewAdapter(getContext(), entryContentObjects, getType());
         rvContent.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvContent.setLayoutManager(layoutManager);
