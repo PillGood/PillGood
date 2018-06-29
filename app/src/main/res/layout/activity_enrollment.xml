@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/diseaseNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Disease Name : "/>
+        <EditText
+            android:id="@+id/diseaseName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/diseaseNameText"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/whenText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="When : "/>
+        <EditText
+            android:id="@+id/when"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/whenText"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/hospitalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hospital Name : "/>
+        <EditText
+            android:id="@+id/hospital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/hospitalText"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/enrollmentBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enroll"/>
+</LinearLayout>

@@ -9,14 +9,21 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -51,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout =  findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-
         prepareNavigation();
 
         // initializing scan object
@@ -80,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     plusBtnIsClicked = true;
                 }
                 plusBtn.startAnimation(plusBtnAnim);
-                fastEnrollmentBtn.startAnimation(fastEnrollmentAnim);
+                fastEnrollmentBtn.startAnimation(fastEnrollmnetAnim);
                 enrollmentBtn.startAnimation(enrollmentAnim);
             }
         });
@@ -93,13 +99,46 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
         enrollmentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-            }
+                Intent intent = new Intent(getApplicationContext(), EnrollmentActivity.class);
+                intent.putExtra("wayToEnroll",2);
+                startActivity(intent);
         });
     }
+
+
+    //getting the scan results
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            // There is no qr code
+            if (result.getContents() == null) {
+                Toast.makeText(MainActivity.this, "Cancle!", Toast.LENGTH_LONG).show();
+            }
+            else {
+                // There is a result
+                Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_SHORT);
+
+                try {
+//                    JSONObject scanningResult = new JSONObject(result.getContents());
+                    JSONArray scanningResult = new JSONArray(result.getContents());
+
+                    /**********/
+                    // intent to enrollmentActivity and deliver the result to enrollmentActivity
+                    Intent intent = new Intent(this, EnrollmentActivity.class);
+                    intent.putExtra("wayToEnroll", 1);
+                    intent.putExtra("QRscanResult", scanningResult.toString());
+                    startActivity(intent);
+                    /**********/
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
     private void prepareNavigation(){
         rvNavigation = findViewById(R.id.navigation_drawer);
@@ -136,17 +175,13 @@ public class MainActivity extends AppCompatActivity {
         mDrawerToggle.syncState();
         mDrawerToggle.setDrawerIndicatorEnabled(true);
     }
-    //getting the scan results
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
     private void requestAllPermissions() {
         if (EasyPermissions.hasPermissions(this, REQUIRED_PERMISSIONS)) {
 
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, "SDGFSDFSDF", 1, REQUIRED_PERMISSIONS);
+
         }
     }
 }
