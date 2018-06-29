@@ -9,8 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     FloatingActionButton plusBtn, fastEnrollmentBtn, enrollmentBtn;
@@ -73,7 +79,9 @@ public class MainActivity extends AppCompatActivity {
         enrollmentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getApplicationContext(), EnrollmentActivity.class);
+                intent.putExtra("wayToEnroll",2);
+                startActivity(intent);
             }
         });
     }
@@ -81,6 +89,31 @@ public class MainActivity extends AppCompatActivity {
     //getting the scan results
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            // There is no qr code
+            if (result.getContents() == null) {
+                Toast.makeText(MainActivity.this, "Cancle!", Toast.LENGTH_LONG).show();
+            }
+            else {
+                // There is a result
+                Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_SHORT);
+
+                try {
+//                    JSONObject scanningResult = new JSONObject(result.getContents());
+                    JSONArray scanningResult = new JSONArray(result.getContents());
+
+                    /**********/
+                    // intent to enrollmentActivity and deliver the result to enrollmentActivity
+                    Intent intent = new Intent(this, EnrollmentActivity.class);
+                    intent.putExtra("wayToEnroll", 1);
+                    intent.putExtra("QRscanResult", scanningResult.toString());
+                    startActivity(intent);
+                    /**********/
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
