@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <meta-data
         android:name="com.google.android.geo.API_KEY"
@@ -48,7 +50,11 @@
 
         <activity
             android:name=".GoogleMapsActivity"
-            android:label="@string/title_activity_google_maps"></activity>
+            android:label="@string/title_activity_google_maps"/>
+        <receiver
+            android:name=".PushAlarmBroadcast"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>
