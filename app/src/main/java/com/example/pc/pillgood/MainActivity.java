@@ -1,5 +1,6 @@
 package com.example.pc.pillgood;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -9,9 +10,13 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
 public class MainActivity extends AppCompatActivity {
     FloatingActionButton plusBtn, fastEnrollmentBtn, enrollmentBtn;
     Boolean plusBtnIsClicked = false;
+    private IntentIntegrator qrScan;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout =  findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        // initializing scan object
+        qrScan = new IntentIntegrator(this);
 
         //-----pop up floating btn
         plusBtn = (FloatingActionButton) findViewById(R.id.mainPlusBtn);
@@ -56,9 +64,11 @@ public class MainActivity extends AppCompatActivity {
         fastEnrollmentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                qrScan.setPrompt("Scanning...");
+                qrScan.initiateScan();
             }
         });
+
 
         enrollmentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,5 +76,11 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    //getting the scan results
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
