@@ -7,10 +7,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.*;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 public class EnrollmentActivity extends AppCompatActivity {
     Intent intent;
@@ -62,6 +73,30 @@ public class EnrollmentActivity extends AppCompatActivity {
             }
         }
 
+        else {
+            Observable<String> obs =
+                    RxTextView.textChanges(edit_diseaseName).filter(new Predicate<CharSequence>() {
+                        @Override
+                        public boolean test(CharSequence charSequence) throws Exception {
+                            return (charSequence.length() > 3);
+                        }
+                    }).debounce(500, TimeUnit.MILLISECONDS)
+                    .map(new Function<CharSequence, String>() {
+                        @Override
+                        public String apply(CharSequence charSequence) throws Exception {
+                            return charSequence.toString();
+                        }
+                    });
+
+            obs.subscribe(new Consumer<String>() {
+                @Override
+                public void accept(String s) throws Exception {
+                    Log.d("autoComplete!!!!", "!!!!!!!!!");
+
+                }
+            });
+        }
+
         enrollmentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,4 +115,6 @@ public class EnrollmentActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

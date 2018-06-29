@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     plusBtnIsClicked = true;
                 }
                 plusBtn.startAnimation(plusBtnAnim);
-                fastEnrollmentBtn.startAnimation(fastEnrollmnetAnim);
+                fastEnrollmentBtn.startAnimation(fastEnrollmentAnim);
                 enrollmentBtn.startAnimation(enrollmentAnim);
             }
         });
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), EnrollmentActivity.class);
                 intent.putExtra("wayToEnroll",2);
                 startActivity(intent);
-        });
+        }});
     }
 
 
@@ -119,8 +119,7 @@ public class MainActivity extends AppCompatActivity {
             // There is no qr code
             if (result.getContents() == null) {
                 Toast.makeText(MainActivity.this, "Cancle!", Toast.LENGTH_LONG).show();
-            }
-            else {
+            } else {
                 // There is a result
                 Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_SHORT);
 
@@ -139,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+        }
+    }
 
     private void prepareNavigation(){
         rvNavigation = findViewById(R.id.navigation_drawer);
