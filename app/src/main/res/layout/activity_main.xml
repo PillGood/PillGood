@@ -29,15 +29,46 @@
 
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:src="@drawable/ic_add_white_48dp"
-        app:fabSize="normal"
-        app:layout_anchor="@id/viewpager"
-        android:layout_margin="16dp"
-        app:layout_anchorGravity="bottom|right|end"
-        android:focusable="false" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/mainPlusBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="50dp"
+            app:srcCompat="@drawable/ic_add_white_48dp"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/mainFastEnrollmentBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_above="@id/mainPlusBtn"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:visibility="invisible"
+            app:backgroundTint="@color/colorPrimary"
+            android:src="@drawable/ic_add_white_48dp"
+            app:fabSize="mini"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/mainEnrollmentBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_above="@id/mainFastEnrollmentBtn"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:visibility="invisible"
+            app:backgroundTint="@color/colorPrimaryDark"
+            android:src="@drawable/ic_add_white_48dp"
+            app:fabSize="mini"/>
+
+    </RelativeLayout>
+
 </android.support.design.widget.CoordinatorLayout>
