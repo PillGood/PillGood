@@ -1,6 +1,7 @@
 package com.example.pc.pillgood;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
@@ -23,6 +24,7 @@ public class Entry implements Serializable {
     private String title;
     private String hospital;
     private Long date;
+    private ArrayList<String> subEntries=new ArrayList<>();
 
     public Entry() {
         id = 0;
@@ -70,7 +72,15 @@ public class Entry implements Serializable {
         this.date = date;
     }
 
-//    public ArrayList<Object> getAllData() {
+    public ArrayList<String> getSubEntries() {
+        return subEntries;
+    }
+
+    public void setSubEntries(ArrayList<String> subEntries) {
+        this.subEntries = subEntries;
+    }
+
+    //    public ArrayList<Object> getAllData() {
 //        ArrayList<Object> result = new ArrayList<>();
 //        result.add(getId());
 //        result.add(getType());
