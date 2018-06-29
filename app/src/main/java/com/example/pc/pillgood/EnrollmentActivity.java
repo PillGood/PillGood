@@ -1,8 +1,11 @@
 package com.example.pc.pillgood;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -39,7 +42,7 @@ public class EnrollmentActivity extends AppCompatActivity {
     EditText edit_hospital;
     TextView tvDate;
     String diseaseName;
-    long date;
+    String date = "";
     String hospitalName;
     Button enrollmentBtn;
     Button cancleBtn;
@@ -49,11 +52,16 @@ public class EnrollmentActivity extends AppCompatActivity {
     Calendar calendar = Calendar.getInstance();
     TextView alarmTime;
     Switch alarmSwitch;
+    int filledYear, filledMonth, filledDay;
+    int alarmHour, alarmMin;
 
     private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-            String date = String.format("%d년 %d월 %d일", datePicker.getYear(), datePicker.getMonth()+1, datePicker.getDayOfMonth());
+            filledYear = datePicker.getYear();
+            filledMonth = datePicker.getMonth()+1;
+            filledDay = datePicker.getDayOfMonth();
+            String date = String.format("%d년 %d월 %d일", filledYear, filledMonth, filledDay);
             tvDate.setText(date);
         }
     };
@@ -61,9 +69,16 @@ public class EnrollmentActivity extends AppCompatActivity {
     private TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker timePicker, int i, int i1) {
-            String time = String.format("%02d:%02d", timePicker.getHour(), timePicker.getMinute());
+            alarmHour = timePicker.getHour();
+            alarmMin = timePicker.getMinute();
+            String time = String.format("%02d:%02d", alarmHour, alarmMin);
             alarmTime.setText(time);
             alarmSwitch.setChecked(true);
+
+            SharedPreferences pref = getSharedPreferences("Push", MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean("alarm", true);
+            editor.commit();
         }
     };
 
@@ -100,11 +115,17 @@ public class EnrollmentActivity extends AppCompatActivity {
                 diseaseName = scanningResult.getString("diseaseName");
                 edit_diseaseName.setText(diseaseName);
 
-                date = scanningResult.getLong("filledDate");
-                DateTime dateTime = new DateTime(date);
-                DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy.MM.dd");
-                tvDate.setText(dateTimeFormatter.print(dateTime));
-                tempDate = date;
+//                date = scanningResult.getLong("filledDate");
+//                DateTime dateTime = new DateTime(date);
+//                DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy.MM.dd");
+//                tvDate.setText(dateTimeFormatter.print(dateTime));
+//                tempDate = date;
+                date = scanningResult.getString("filledDate");
+                int year = Integer.getInteger(date.substring(0,4));
+                int month = Integer.getInteger(date.substring(4,6));
+                int day = Integer.getInteger(date.substring(6));
+                tvDate.setText(year + "년 " + month + "월 "+ day + "일");
+
 
                 JSONObject hospitalObj;
                 try {
@@ -161,14 +182,29 @@ public class EnrollmentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 diseaseName = edit_diseaseName.getText().toString();
                 hospitalName = edit_hospital.getText().toString();
-                date = tempDate;
+                date += String.format("%04d",filledYear);
+                date += String.format("%02d", filledMonth);
+                date += String.format("%02d", filledDay);
 
                 // store the data
                 EntryDatabaseHandler handler = EntryDatabaseHandler.getInstance(getApplicationContext());
                 Log.v("Database Size!!!", Integer.toString(handler.getEntryCount()));
-                Entry entry = new Entry(handler.getEntryCount(), diseaseName, hospitalName, date);
+                Entry entry = new Entry(handler.getEntryCount(), diseaseName, hospitalName, Long.parseLong(date));
                 handler.addEntry(entry);
                 Log.v("Database Size!!!", Integer.toString(handler.getEntryCount()));
+
+                // set push alarm
+                AlarmManager manager = (AlarmManager) getSystemService(getApplicationContext().ALARM_SERVICE);
+                Intent intent = new Intent(EnrollmentActivity.this, PushAlarmBroadcast.class);
+                intent.putExtra("diseaseName", diseaseName);
+
+                PendingIntent sender = PendingIntent.getBroadcast(EnrollmentActivity.this, 0, intent, 0);
+
+                //set alarm
+                calendar.set(curYear, curMonth, curDay, alarmHour, alarmMin, 0);
+
+                //book alarm
+                manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
 
                 //return to home
                 finish();
