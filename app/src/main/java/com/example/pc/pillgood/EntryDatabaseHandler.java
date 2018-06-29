@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +18,7 @@ import java.util.List;
 
 public class EntryDatabaseHandler extends SQLiteOpenHelper {
     // All Static variables
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "entryManager";
     private static final String TABLE_ENTRIES = "entries";
     // Entry Table Columns names
@@ -24,6 +27,7 @@ public class EntryDatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_HOSPITAL = "hospital";
     private static final String KEY_DATE = "date";
     private static final String KEY_DONE = "done";
+    private static final String KEY_SUB = "sub";
     private static EntryDatabaseHandler entryDatabaseHandler;
 
 
@@ -49,7 +53,8 @@ public class EntryDatabaseHandler extends SQLiteOpenHelper {
                 + KEY_TITLE + " TEXT,"
                 + KEY_HOSPITAL + " TEXT,"
                 + KEY_DATE + " INTEGER,"
-                + KEY_DONE + " INTEGER" + ")";
+                + KEY_DONE + " INTEGER,"
+                + KEY_SUB + " TEXT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -71,6 +76,8 @@ public class EntryDatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_HOSPITAL, entry.getHospital());
         values.put(KEY_DATE, entry.getDate().toString());
         values.put(KEY_DONE, entry.getDone());
+        JSONArray jsArray = new JSONArray(entry.getSubEntries());
+        values.put(KEY_SUB, jsArray.toString());
 
         // Inserting Row
         db.insert(TABLE_ENTRIES, null, values);
@@ -81,7 +88,7 @@ public class EntryDatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_ENTRIES,
-                new String[]{KEY_ID, KEY_TITLE, KEY_HOSPITAL, KEY_DATE, KEY_DONE},
+                new String[]{KEY_ID, KEY_TITLE, KEY_HOSPITAL, KEY_DATE, KEY_DONE, KEY_SUB},
                 KEY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
@@ -89,6 +96,18 @@ public class EntryDatabaseHandler extends SQLiteOpenHelper {
 
         Entry entry = new Entry(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), Long.parseLong(cursor.getString(3)));
         entry.setDone(Integer.parseInt(cursor.getString(4)));
+        ArrayList<String> listdata = new ArrayList<>();
+        try {
+            JSONArray jArray = new JSONArray(cursor.getString(5));
+            if (jArray != null) {
+                for (int i=0;i<jArray.length();i++){
+                    listdata.add(jArray.getString(i));
+                }
+            }
+            entry.setSubEntries(listdata);
+        }catch (JSONException e){
+
+        }
         cursor.close();
         return entry;
     }
@@ -135,6 +154,18 @@ public class EntryDatabaseHandler extends SQLiteOpenHelper {
                     entry.setHospital(cursor.getString(2));
                     entry.setDate(Long.parseLong(cursor.getString(3)));
                     entry.setDone(Integer.parseInt(cursor.getString(4)));
+                    ArrayList<String> listdata = new ArrayList<>();
+                    try {
+                        JSONArray jArray = new JSONArray(cursor.getString(5));
+                        if (jArray != null) {
+                            for (int i=0;i<jArray.length();i++){
+                                listdata.add(jArray.getString(i));
+                            }
+                        }
+                        entry.setSubEntries(listdata);
+                    }catch (JSONException e){
+
+                    }
                     contactList.add(entry);
                 }
             } while (cursor.moveToNext());
@@ -142,6 +173,7 @@ public class EntryDatabaseHandler extends SQLiteOpenHelper {
         cursor.close();
         return contactList;
     }
+
     public List<Entry> getUndoneEntries() {
         List<Entry> contactList = new ArrayList<>();
         // Select All Query
@@ -160,6 +192,18 @@ public class EntryDatabaseHandler extends SQLiteOpenHelper {
                     entry.setHospital(cursor.getString(2));
                     entry.setDate(Long.parseLong(cursor.getString(3)));
                     entry.setDone(Integer.parseInt(cursor.getString(4)));
+                    ArrayList<String> listdata = new ArrayList<>();
+                    try {
+                        JSONArray jArray = new JSONArray(cursor.getString(5));
+                        if (jArray != null) {
+                            for (int i=0;i<jArray.length();i++){
+                                listdata.add(jArray.getString(i));
+                            }
+                        }
+                        entry.setSubEntries(listdata);
+                    }catch (JSONException e){
+
+                    }
                     contactList.add(entry);
                 }
             } while (cursor.moveToNext());
@@ -186,6 +230,8 @@ public class EntryDatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_HOSPITAL, entry.getHospital());
         values.put(KEY_DATE, entry.getDate().toString());
         values.put(KEY_DONE, entry.getDone());
+        JSONArray jsArray = new JSONArray(entry.getSubEntries());
+        values.put(KEY_SUB, jsArray.toString());
 
         // updating row
         return db.update(TABLE_ENTRIES, values, KEY_ID + " = ?", new String[]{String.valueOf(entry.getId())});

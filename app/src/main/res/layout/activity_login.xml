@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp"
     tools:context=".LoginActivity">
-    <EditText
-        android:id="@+id/username"
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="username"/>
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="password"/>
+        android:layout_height="match_parent"
+        android:contentDescription="@string/date"
+        android:src="@drawable/iphone6"/>
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="150dp"
         android:id="@+id/login"
-        android:text="login"/>
-</LinearLayout>
+        android:text="로그인"
+        android:textColor="#FFFFFF"
+        android:textSize="13sp"
+        android:backgroundTint="@color/colorAccent"/>
+</RelativeLayout>

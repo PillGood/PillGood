@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -31,6 +32,11 @@ public class EnrollmentActivity extends AppCompatActivity {
     JSONObject scanningResult;
     EditText edit_diseaseName;
     EditText edit_hospital;
+    EditText etSubMed1;
+    EditText etSubMed2;
+    EditText etSubMed3;
+    EditText etSubMed4;
+    EditText etSubMed5;
     TextView tvDate;
     String diseaseName;
     long date;
@@ -50,6 +56,11 @@ public class EnrollmentActivity extends AppCompatActivity {
         edit_hospital = (EditText) findViewById(R.id.hospital);
         tvDate = findViewById(R.id.whenText);
         enrollmentBtn = (Button) findViewById(R.id.enrollmentBtn);
+        etSubMed1=findViewById(R.id.list);
+        etSubMed2=findViewById(R.id.list1);
+        etSubMed3=findViewById(R.id.list2);
+        etSubMed4=findViewById(R.id.list3);
+        etSubMed5=findViewById(R.id.list4);
 
         if (wayToEnroll == 1) { // Fast enrollment using qr scanning
             try {
@@ -106,12 +117,34 @@ public class EnrollmentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 diseaseName = edit_diseaseName.getText().toString();
                 hospitalName = edit_hospital.getText().toString();
-                date = tempDate;
+                ArrayList<String> subMed=new ArrayList<>();
+                String sub1=etSubMed1.getText().toString();
+                String sub2=etSubMed2.getText().toString();
+                String sub3=etSubMed3.getText().toString();
+                String sub4=etSubMed4.getText().toString();
+                String sub5=etSubMed5.getText().toString();
+                if(sub1.length()>0){
+                    subMed.add(sub1);
+                }
+                if(sub2.length()>0){
+                    subMed.add(sub2);
+                }
+                if(sub3.length()>0){
+                    subMed.add(sub3);
+                }
+                if(sub4.length()>0){
+                    subMed.add(sub4);
+                }
+                if(sub5.length()>0){
+                    subMed.add(sub5);
+                }
+//                date = tempDate;
 
                 // store the data
                 EntryDatabaseHandler handler = EntryDatabaseHandler.getInstance(getApplicationContext());
                 Log.v("Database Size!!!", Integer.toString(handler.getEntryCount()));
-                Entry entry = new Entry(handler.getEntryCount(), diseaseName, hospitalName, date);
+                Entry entry = new Entry(handler.getEntryCount(), diseaseName, hospitalName, 1564651561L);
+                entry.setSubEntries(subMed);
                 handler.addEntry(entry);
                 Log.v("Database Size!!!", Integer.toString(handler.getEntryCount()));
 

@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                     case 1:
                         break;
                     case 2:
-                        Intent intent=new Intent(getApplicationContext(), MapActivity.class);
+                        Intent intent=new Intent(getApplicationContext(), GoogleMapsActivity.class);
                         startActivity(intent);
                         break;
                     case 3:

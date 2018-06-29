@@ -1,6 +1,7 @@
 package com.example.pc.pillgood;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -122,6 +123,12 @@ public class MainRecyclerViewAdapter extends ExpandableRecyclerAdapter<EntryCont
             }else{
                 tvTitle.setPaintFlags(tvTitle.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
             }
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
         }
         private void bind(final int groupPosition) {
             if(entryObjects.size()>0) {
@@ -165,6 +172,9 @@ public class MainRecyclerViewAdapter extends ExpandableRecyclerAdapter<EntryCont
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Intent intent=new Intent(context, InfoActivity.class);
+                    intent.putExtra("entry", tvTitle.getText());
+                    context.startActivity(intent);
                 }
             });
         }
