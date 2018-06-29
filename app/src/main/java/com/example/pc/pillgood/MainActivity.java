@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         enrollmentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
