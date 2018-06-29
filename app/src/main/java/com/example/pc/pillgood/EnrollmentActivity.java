@@ -1,13 +1,18 @@
 package com.example.pc.pillgood;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
@@ -18,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -36,7 +42,30 @@ public class EnrollmentActivity extends AppCompatActivity {
     long date;
     String hospitalName;
     Button enrollmentBtn;
+    Button cancleBtn;
     Long tempDate;
+    DatePickerDialog datePickerDialog;
+    TimePickerDialog timePickerDialog;
+    Calendar calendar = Calendar.getInstance();
+    TextView alarmTime;
+    Switch alarmSwitch;
+
+    private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+            String date = String.format("%d년 %d월 %d일", datePicker.getYear(), datePicker.getMonth()+1, datePicker.getDayOfMonth());
+            tvDate.setText(date);
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int i, int i1) {
+            String time = String.format("%02d:%02d", timePicker.getHour(), timePicker.getMinute());
+            alarmTime.setText(time);
+            alarmSwitch.setChecked(true);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +79,18 @@ public class EnrollmentActivity extends AppCompatActivity {
         edit_hospital = (EditText) findViewById(R.id.hospital);
         tvDate = findViewById(R.id.whenText);
         enrollmentBtn = (Button) findViewById(R.id.enrollmentBtn);
+        alarmTime = findViewById(R.id.timeData);
+        alarmSwitch = findViewById(R.id.alarmSwitch);
+        cancleBtn = findViewById(R.id.cancelButton);
+
+        final int curYear = calendar.get(Calendar.YEAR);
+        final int curMonth = calendar.get(Calendar.MONTH);
+        final int curDay = calendar.get(Calendar.DAY_OF_MONTH);
+        final int curHour = calendar.get(Calendar.HOUR_OF_DAY);
+        final int curMinute = calendar.get(Calendar.MINUTE);
+
+        datePickerDialog = new DatePickerDialog(this, dateSetListener, curYear, curMonth, curDay);
+        timePickerDialog = new TimePickerDialog(this, timeSetListener, curHour, curMinute, true);
 
         if (wayToEnroll == 1) { // Fast enrollment using qr scanning
             try {
@@ -101,6 +142,20 @@ public class EnrollmentActivity extends AppCompatActivity {
                     });
         }
 
+        tvDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                datePickerDialog.show();
+            }
+        });
+
+        alarmTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timePickerDialog.show();
+            }
+        });
+
         enrollmentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,6 +171,13 @@ public class EnrollmentActivity extends AppCompatActivity {
                 Log.v("Database Size!!!", Integer.toString(handler.getEntryCount()));
 
                 //return to home
+                finish();
+            }
+        });
+
+        cancleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 finish();
             }
         });

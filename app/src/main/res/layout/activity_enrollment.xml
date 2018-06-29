@@ -105,9 +105,10 @@
                     android:id="@+id/whenText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2018.6.30"
+                    android:text="여기를 클릭하세요"
                     android:layout_marginLeft="160dp"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -145,11 +146,13 @@
                     android:text="@string/setting_notification" />
 
                 <TextView
+                    android:id="@+id/timeData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="48sp"
                     android:layout_marginLeft="200dp"
                     android:text="14:00" />
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -179,6 +182,7 @@
                     android:text="@string/push_notification" />
 
                 <Switch
+                    android:id="@+id/alarmSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="270dp" />
