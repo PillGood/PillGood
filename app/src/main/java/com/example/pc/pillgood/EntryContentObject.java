@@ -11,6 +11,7 @@ public class EntryContentObject implements Parent<String> {
     private ArrayList<String> options;
     private int icon;
     private long date;
+    private int done;
 
     public EntryContentObject() {
         options = new ArrayList<>();
@@ -51,6 +52,14 @@ public class EntryContentObject implements Parent<String> {
 
     public void setDate(long date) {
         this.date = date;
+    }
+
+    public int getDone() {
+        return done;
+    }
+
+    public void setDone(int done) {
+        this.done = done;
     }
 
     @Override

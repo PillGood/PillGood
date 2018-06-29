@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     Manifest.permission.CHANGE_WIFI_STATE};
     boolean shade=false;
     private TextView tvQR, tvManual;
+    private MainFragmentAdapter adapter;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
         requestAllPermissions();
 
-        ViewPager viewPager =  findViewById(R.id.viewpager);
-        MainFragmentAdapter adapter = new MainFragmentAdapter(this, getSupportFragmentManager());
+        viewPager =  findViewById(R.id.viewpager);
+        adapter = new MainFragmentAdapter(this, getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout =  findViewById(R.id.tabs);
@@ -131,8 +134,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
         enrollmentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,6 +143,20 @@ public class MainActivity extends AppCompatActivity {
         }});
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        for(String tab:adapter.getTabs()){
+            MainFragment fragment = (MainFragment)(getSupportFragmentManager().findFragmentByTag(tab));
+            if(fragment!=null){
+                final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.detach(fragment);
+                ft.attach(fragment);
+                ft.commit();
+//                fragment.notifyAdapter();
+            }
+        }
+    }
 
     //getting the scan results
     @Override

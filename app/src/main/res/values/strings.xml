@@ -13,4 +13,15 @@
     <string name="navigation_profile">Profile</string>
     <string name="drawer_open" translatable="false">Open navigation drawer</string>
     <string name="drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="prescription_name">Prescription Name</string>
+    <string name="prescription_name_hint">Enter the prescription name</string>
+    <string name="prescription_list">Prescription List</string>
+    <string name="setting_notification">Notifications</string>
+    <string name="sound">Sound</string>
+    <string name="push_notification">Push Notification</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="date">Prescription Date</string>
+    <string name="enter_prescription">Please enter a prescription.</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>

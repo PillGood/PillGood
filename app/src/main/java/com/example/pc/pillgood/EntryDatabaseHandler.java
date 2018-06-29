@@ -15,7 +15,7 @@ import java.util.List;
 
 public class EntryDatabaseHandler extends SQLiteOpenHelper {
     // All Static variables
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "entryManager";
     private static final String TABLE_ENTRIES = "entries";
     // Entry Table Columns names
@@ -23,7 +23,9 @@ public class EntryDatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_TITLE = "title";
     private static final String KEY_HOSPITAL = "hospital";
     private static final String KEY_DATE = "date";
+    private static final String KEY_DONE = "done";
     private static EntryDatabaseHandler entryDatabaseHandler;
+
 
     private EntryDatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -46,7 +48,8 @@ public class EntryDatabaseHandler extends SQLiteOpenHelper {
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_TITLE + " TEXT,"
                 + KEY_HOSPITAL + " TEXT,"
-                + KEY_DATE + " INTEGER" + ")";
+                + KEY_DATE + " INTEGER,"
+                + KEY_DONE + " INTEGER" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -67,6 +70,7 @@ public class EntryDatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_TITLE, entry.getTitle());
         values.put(KEY_HOSPITAL, entry.getHospital());
         values.put(KEY_DATE, entry.getDate().toString());
+        values.put(KEY_DONE, entry.getDone());
 
         // Inserting Row
         db.insert(TABLE_ENTRIES, null, values);
@@ -77,13 +81,14 @@ public class EntryDatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_ENTRIES,
-                new String[]{KEY_ID, KEY_TITLE, KEY_HOSPITAL, KEY_DATE},
+                new String[]{KEY_ID, KEY_TITLE, KEY_HOSPITAL, KEY_DATE, KEY_DONE},
                 KEY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
         Entry entry = new Entry(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), Long.parseLong(cursor.getString(3)));
+        entry.setDone(Integer.parseInt(cursor.getString(4)));
         cursor.close();
         return entry;
     }
@@ -104,7 +109,59 @@ public class EntryDatabaseHandler extends SQLiteOpenHelper {
                 entry.setTitle(cursor.getString(1));
                 entry.setHospital(cursor.getString(2));
                 entry.setDate(Long.parseLong(cursor.getString(3)));
+                entry.setDone(Integer.parseInt(cursor.getString(4)));
                 contactList.add(entry);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return contactList;
+    }
+
+    public List<Entry> getDoneEntries() {
+        List<Entry> contactList = new ArrayList<>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_ENTRIES;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                if (Integer.parseInt(cursor.getString(4)) == 1) {
+                    Entry entry = new Entry();
+                    entry.setId(Integer.parseInt(cursor.getString(0)));
+                    entry.setTitle(cursor.getString(1));
+                    entry.setHospital(cursor.getString(2));
+                    entry.setDate(Long.parseLong(cursor.getString(3)));
+                    entry.setDone(Integer.parseInt(cursor.getString(4)));
+                    contactList.add(entry);
+                }
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return contactList;
+    }
+    public List<Entry> getUndoneEntries() {
+        List<Entry> contactList = new ArrayList<>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_ENTRIES;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                if (Integer.parseInt(cursor.getString(4)) == 0) {
+                    Entry entry = new Entry();
+                    entry.setId(Integer.parseInt(cursor.getString(0)));
+                    entry.setTitle(cursor.getString(1));
+                    entry.setHospital(cursor.getString(2));
+                    entry.setDate(Long.parseLong(cursor.getString(3)));
+                    entry.setDone(Integer.parseInt(cursor.getString(4)));
+                    contactList.add(entry);
+                }
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -128,6 +185,7 @@ public class EntryDatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_TITLE, entry.getTitle());
         values.put(KEY_HOSPITAL, entry.getHospital());
         values.put(KEY_DATE, entry.getDate().toString());
+        values.put(KEY_DONE, entry.getDone());
 
         // updating row
         return db.update(TABLE_ENTRIES, values, KEY_ID + " = ?", new String[]{String.valueOf(entry.getId())});

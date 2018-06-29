@@ -3,45 +3,76 @@
     android:id="@+id/content_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:orientation="horizontal"
+    android:padding="16dp">
 
     <RelativeLayout
-        android:layout_width="36dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_skull_off" />
+
+        <ImageView
             android:id="@+id/icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_centerInParent="true"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_edit_white_48dp" />
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="32dp"
+            android:layout_width="60dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_pill_light" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Content" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/hospital"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hospital" />
+        <TextView
+            android:id="@+id/name"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextPrimary"
+            android:layout_marginBottom="4dp"
+            android:text="Content" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/date"
-        android:text="4534534523423"/>
+        <TextView
+            android:id="@+id/hospital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hospital" />
+    </LinearLayout>
 
-    <ImageView
-        android:id="@+id/down"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_keyboard_arrow_down_black_48dp"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="right">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/date"
+            android:layout_alignParentBottom="true"
+            android:text="4534534523423" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/past_fragment" />
+
+        <ImageView
+            android:id="@+id/down"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_keyboard_arrow_down_black_48dp" />
+    </LinearLayout>
+
 </LinearLayout>

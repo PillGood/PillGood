@@ -1,6 +1,7 @@
 package com.example.pc.pillgood;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,22 +14,30 @@ import com.bignerdranch.expandablerecyclerview.ChildViewHolder;
 import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter;
 import com.bignerdranch.expandablerecyclerview.ParentViewHolder;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 
 public class MainRecyclerViewAdapter extends ExpandableRecyclerAdapter<EntryContentObject, String, MainRecyclerViewAdapter.EntryContentHolder, MainRecyclerViewAdapter.OptionEntryHolder> {
-    public ArrayList<EntryContentObject> entries = new ArrayList<>();
+    public ArrayList<EntryContentObject> entryObjects = new ArrayList<>();
+    public ArrayList<Entry> entries=new ArrayList<>();
     private Context context;
     private final int TYPE_CHILD = 10;
-    private final int TYPE_PARENT_1 = 135;
-    private final int TYPE_PARENT_2 = 234;
+    private final int TYPE_PARENT_1 = 0;
+    private final int TYPE_PARENT_2 = 1;
     private int type;
+    public EntryDatabaseHandler db;
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public MainRecyclerViewAdapter(Context context, ArrayList<EntryContentObject> entries, int type) {
         super(entries);
         this.context = context;
-        this.entries.addAll(entries);
+        entryObjects.clear();
+        entryObjects.addAll(entries);
         this.type=type;
+        db=EntryDatabaseHandler.getInstance(context);
     }
 
     @NonNull
@@ -64,7 +73,7 @@ public class MainRecyclerViewAdapter extends ExpandableRecyclerAdapter<EntryCont
 
     @Override
     public int getParentViewType(int parentPosition) {
-        if(type==0) {
+        if(type==0){
             return TYPE_PARENT_1;
         }else{
             return TYPE_PARENT_2;
@@ -79,6 +88,17 @@ public class MainRecyclerViewAdapter extends ExpandableRecyclerAdapter<EntryCont
     @Override
     public boolean isParentViewType(int viewType) {
         return viewType == TYPE_PARENT_1||viewType==TYPE_PARENT_2;
+    }
+
+    public void swap(ArrayList<EntryContentObject> list){
+        if (entryObjects != null) {
+            entryObjects.clear();
+            entryObjects.addAll(list);
+        }
+        else {
+            entryObjects = list;
+        }
+        notifyDataSetChanged();
     }
 
     public class EntryContentHolder extends ParentViewHolder {
@@ -96,34 +116,43 @@ public class MainRecyclerViewAdapter extends ExpandableRecyclerAdapter<EntryCont
             tvTitle=convertView.findViewById(R.id.name);
             tvDate=convertView.findViewById(R.id.date);
             tvHospital=convertView.findViewById(R.id.hospital);
+            expandButton = convertView.findViewById(R.id.down);
             if(type==TYPE_PARENT_1){
                 doneButton=convertView.findViewById(R.id.doneButton);
+            }else{
+                tvTitle.setPaintFlags(tvTitle.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
             }
         }
         private void bind(final int groupPosition) {
-            final EntryContentObject entryContentObject = entries.get(groupPosition);
-            tvTitle.setText(entryContentObject.getTitle());
-            tvDate.setText(entryContentObject.getDate()+"");
-            tvHospital.setText(entryContentObject.getHospital());
-            if(type==TYPE_PARENT_1) {
-                doneButton.setOnClickListener(new View.OnClickListener() {
+            if(entryObjects.size()>0) {
+                final EntryContentObject entryContentObject = entryObjects.get(groupPosition);
+                tvTitle.setText(entryContentObject.getTitle());
+                DateTime dateTime=new DateTime(entryContentObject.getDate());
+                DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy.MM.dd");
+                tvDate.setText(dtfOut.print(dateTime));
+                tvHospital.setText(entryContentObject.getHospital());
+                if (type == TYPE_PARENT_1) {
+                    doneButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Entry entry = db.getUndoneEntries().get(groupPosition);
+                            entry.setDone(1);
+                            db.updateEntry(entry);
+                            notifyParentRemoved(groupPosition);
+                        }
+                    });
+                }
+                expandButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        if (isExpanded()) {
+                            collapseView();
+                        } else {
+                            expandView();
+                        }
                     }
                 });
             }
-            expandButton =  itemView.findViewById(R.id.down);
-            expandButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isExpanded()) {
-                        collapseView();
-                    } else {
-                        expandView();
-                    }
-                }
-            });
         }
     }
 
@@ -141,7 +170,7 @@ public class MainRecyclerViewAdapter extends ExpandableRecyclerAdapter<EntryCont
         }
 
         private void bind(int parentPosition, int childPosition) {
-            tvTitle.setText(entries.get(parentPosition).getChildList().get(childPosition));
+            tvTitle.setText(entryObjects.get(parentPosition).getChildList().get(childPosition));
         }
 
     }

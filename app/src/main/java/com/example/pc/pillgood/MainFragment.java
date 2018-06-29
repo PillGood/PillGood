@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainFragment extends Fragment {
 
@@ -21,7 +22,7 @@ public class MainFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static MainFragment newInstance(String param1, String param2) {
+    public static MainFragment newInstance() {
         MainFragment fragment = new MainFragment();
         return fragment;
     }
@@ -47,22 +48,71 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView= inflater.inflate(R.layout.fragment_main, container, false);
         rvContent=rootView.findViewById(R.id.content);
-        for(int i=0; i<3; i++) {
-            EntryContentObject entryContentObject = new EntryContentObject();
-            entryContentObject.setTitle("name");
-            entryContentObject.setHospital("hospital");
-            entryContentObject.setDate(234235324);
-            ArrayList<String> temp = new ArrayList<>();
-            temp.add("sssssss");
-            temp.add("fffffff");
-            entryContentObject.setOptions(temp);
-            entryContentObjects.add(entryContentObject);
+        entryContentObjects.clear();
+        EntryDatabaseHandler entryDatabaseHandler=EntryDatabaseHandler.getInstance(getContext());
+        if(getType()==0){
+            List<Entry> entries=entryDatabaseHandler.getUndoneEntries();
+            for(Entry entry:entries) {
+                EntryContentObject entryContentObject = new EntryContentObject();
+                entryContentObject.setTitle(entry.getTitle());
+                entryContentObject.setHospital(entry.getHospital());
+                entryContentObject.setDate(entry.getDate());
+                entryContentObject.setOptions(entry.getSubEntries());
+                entryContentObject.setDone(entry.getDone());
+                entryContentObjects.add(entryContentObject);
+            }
+            adapter=new MainRecyclerViewAdapter(getContext(), entryContentObjects, getType());
+        }else{
+            List<Entry> entries=entryDatabaseHandler.getDoneEntries();
+            for(Entry entry:entries) {
+                EntryContentObject entryContentObject = new EntryContentObject();
+                entryContentObject.setTitle(entry.getTitle());
+                entryContentObject.setHospital(entry.getHospital());
+                entryContentObject.setDate(entry.getDate());
+                entryContentObject.setOptions(entry.getSubEntries());
+                entryContentObject.setDone(entry.getDone());
+                entryContentObjects.add(entryContentObject);
+            }
+            adapter=new MainRecyclerViewAdapter(getContext(), entryContentObjects, getType());
         }
-        adapter=new MainRecyclerViewAdapter(getContext(), entryContentObjects, getType());
+
         rvContent.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvContent.setLayoutManager(layoutManager);
         return rootView;
     }
-
+    public void notifyAdapter(){
+        EntryDatabaseHandler entryDatabaseHandler=EntryDatabaseHandler.getInstance(getContext());
+        entryContentObjects.clear();
+        if(getType()==0){
+            List<Entry> entries=entryDatabaseHandler.getUndoneEntries();
+            for(Entry entry:entries) {
+                EntryContentObject entryContentObject = new EntryContentObject();
+                entryContentObject.setTitle(entry.getTitle());
+                entryContentObject.setHospital(entry.getHospital());
+                entryContentObject.setDate(entry.getDate());
+                entryContentObject.setOptions(entry.getSubEntries());
+                entryContentObject.setDone(entry.getDone());
+                entryContentObjects.add(entryContentObject);
+            }
+        }else{
+            List<Entry> entries=entryDatabaseHandler.getDoneEntries();
+            for(Entry entry:entries) {
+                EntryContentObject entryContentObject = new EntryContentObject();
+                entryContentObject.setTitle(entry.getTitle());
+                entryContentObject.setHospital(entry.getHospital());
+                entryContentObject.setDate(entry.getDate());
+                entryContentObject.setOptions(entry.getSubEntries());
+                entryContentObject.setDone(entry.getDone());
+                entryContentObjects.add(entryContentObject);
+            }
+        }
+//        adapter.swap(entryContentObjects);
+//        adapter.setEntryObjects(entryContentObjects);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+//        rvContent.setLayoutManager(layoutManager);
+//        rvContent.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+//        adapter.notifyParentRangeChanged(0, adapter.getItemCount());
+    }
 }

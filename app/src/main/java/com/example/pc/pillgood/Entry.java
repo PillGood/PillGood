@@ -25,6 +25,7 @@ public class Entry implements Serializable {
     private String hospital;
     private Long date;
     private ArrayList<String> subEntries=new ArrayList<>();
+    private int done=0;
 
     public Entry() {
         id = 0;
@@ -70,6 +71,17 @@ public class Entry implements Serializable {
 
     public void setDate(Long date) {
         this.date = date;
+    }
+    public void makeDone(){
+        done=1;
+    }
+
+    public void setDone(int done) {
+        this.done = done;
+    }
+
+    public int getDone() {
+        return done;
     }
 
     public ArrayList<String> getSubEntries() {

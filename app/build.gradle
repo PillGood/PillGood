@@ -20,6 +20,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation files('libs/joda-time-2.9.9.jar')
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.android.support:design:27.1.1'
@@ -33,5 +34,8 @@ dependencies {
     implementation 'com.naver.maps.open:naver-map-api:2.1.2@aar'
     implementation 'pub.devrel:easypermissions:1.2.0'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.16'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
 
 }
