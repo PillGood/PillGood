@@ -28,7 +28,6 @@
             android:background="@android:color/white" />
 
     </LinearLayout>
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_button"
         android:layout_width="wrap_content"

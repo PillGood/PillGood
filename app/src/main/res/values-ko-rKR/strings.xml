@@ -3,4 +3,6 @@
     <string name="app_name">PIllGood</string>
     <string name="current_fragment">복용중</string>
     <string name="past_fragment">복용후</string>
+    <string name="action_qr">QR 코드</string>
+    <string name="action_manual">직접 입력</string>
 </resources>
