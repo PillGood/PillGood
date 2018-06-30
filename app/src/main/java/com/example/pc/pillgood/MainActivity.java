@@ -25,6 +25,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -172,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
 //                    JSONObject scanningResult = new JSONObject(result.getContents());
-                    JSONArray scanningResult = new JSONArray(result.getContents());
+                    JSONObject scanningResult = new JSONObject(result.getContents());
 
                     /**********/
                     // intent to enrollmentActivity and deliver the result to enrollmentActivity
