@@ -13,12 +13,10 @@ import android.widget.TextView;
 
 public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private String titles[];
-    private int icons[];
     private OnItemSelectedListener mListener;
 
     public NavigationAdapter(String Titles[], int Icons[]) {
         titles = Titles;
-        icons = Icons;
     }
 
     @Override
@@ -43,7 +41,6 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case 1:
                 ElementViewHolder elementViewHolder = (ElementViewHolder) holder;
                 elementViewHolder.tvTitle.setText(titles[position - 1]);
-                elementViewHolder.ivIcon.setImageResource(icons[position - 1]);
         }
     }
 
@@ -73,7 +70,6 @@ public class NavigationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public ElementViewHolder(View itemView) {
             super(itemView);
             tvTitle =  itemView.findViewById(R.id.rowText);
-            ivIcon =  itemView.findViewById(R.id.rowIcon);
             holderId = 1;
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
