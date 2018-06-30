@@ -40,6 +40,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prescription_name_hint"
                     android:layout_marginLeft="160dp" />
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -59,31 +60,33 @@
                     android:layout_marginLeft="160dp"
                     android:orientation="vertical">
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/list"
                         android:textSize="13sp"
                         android:layout_width="170dp"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:dropDownWidth="wrap_content"
+                        android:inputType="textAutoComplete"/>
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/list1"
                         android:textSize="13sp"
                         android:layout_width="170dp"
                         android:layout_height="wrap_content" />
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/list2"
                         android:textSize="13sp"
                         android:layout_width="170dp"
                         android:layout_height="wrap_content" />
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/list3"
                         android:textSize="13sp"
                         android:layout_width="170dp"
                         android:layout_height="wrap_content" />
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/list4"
                         android:textSize="13sp"
                         android:layout_width="170dp"
