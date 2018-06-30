@@ -20,9 +20,21 @@ import java.util.List;
 public class ServerHandler {
     private OkHttpClient client;
     private Request request;
-    private Callback callback;
+    final String[] resultReceived = new String[1];
 
-    public void sendforautoCompletion(String pillName) {
+//    private Callback callback = new Callback() {
+//        @Override
+//        public void onFailure(Request request, IOException e) {
+//            Log.e("Callback Error", "fail to receive data");
+//        }
+//
+//        @Override
+//        public void onResponse(Response response) throws IOException {
+//            resultReceived[0] = response.body().string();
+//        }
+//    };
+
+    public void sendforAutoCompletion(String pillName, Callback callback) {
         if (pillName == null) {
             pillName = "";
         }
@@ -40,6 +52,9 @@ public class ServerHandler {
         request = new Request.Builder()
                     .url(url)
                     .build();
+
+        // GET Request
+        client.newCall(request).enqueue(callback);
     }
 
 //    public String sendforDetails(String pillName) {
@@ -52,28 +67,22 @@ public class ServerHandler {
      * which is similar to the word user write down.
      *
      * */
-    public List<String> receivePillList(String pRecvServerPage) {
+    public List<String> receivePillList(String body) {
         List<String> pillList = new ArrayList<>();
-        final String[] resultReceived = new String[1];
+
         JSONObject obj = null;
         JSONArray pillData = null;
         int size;
 
-        callback = new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                Log.e("Callback Error", "fail to receive data");
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                resultReceived[0] = response.body().string();
-            }
-        };
+        // failed to get data from server
+        if (body == null) {
+            return null;
+        }
 
         // convert string to json
         try {
-            obj = new JSONObject(resultReceived[0]);
+            Log.d("body", body);
+            obj = new JSONObject(body);
         } catch (JSONException e) {
             e.printStackTrace();
         }
