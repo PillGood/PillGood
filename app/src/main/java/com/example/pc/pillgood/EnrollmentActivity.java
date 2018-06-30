@@ -21,7 +21,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
@@ -42,24 +41,32 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 
-
 public class EnrollmentActivity extends AppCompatActivity {
     Intent intent;
     JSONObject scanningResultArray;
     JSONObject scanningResult;
     EditText edit_diseaseName;
     EditText edit_hospital;
+    EditText etSubMed1;
+    EditText etSubMed2;
+    EditText etSubMed3;
+    EditText etSubMed4;
+    EditText etSubMed5;
     TextView tvDate;
     String diseaseName;
-    String date = "";
+
+    String date="";
     String hospitalName;
     Button enrollmentBtn;
     Button cancleBtn;
+    Long tempDate;
+  
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
     Calendar calendar = Calendar.getInstance();
     TextView alarmTime;
     Switch alarmSwitch;
+
     List<String> pillList = null;
     int filledYear, filledMonth, filledDay;
     int alarmHour, alarmMin;
@@ -100,6 +107,7 @@ public class EnrollmentActivity extends AppCompatActivity {
     };
 
     @SuppressLint("CheckResult")
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,6 +151,12 @@ public class EnrollmentActivity extends AppCompatActivity {
                 int day = Integer.parseInt(date.substring(6));
                 tvDate.setText(year + "년 " + month + "월 "+ day + "일");
 
+                date = scanningResult.getString("filledDate");
+                int year = Integer.getInteger(date.substring(0,4));
+                int month = Integer.getInteger(date.substring(4,6));
+                int day = Integer.getInteger(date.substring(6));
+                tvDate.setText(year + "년 " + month + "월 "+ day + "일");
+
                 hospitalName = scanningResult.getString("hospital_name");
                 edit_hospital.setText(hospitalName);
 
@@ -166,6 +180,12 @@ public class EnrollmentActivity extends AppCompatActivity {
             }
         } else {
         }
+        tvDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                datePickerDialog.show();
+            }
+        });
 
         tvDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,11 +209,34 @@ public class EnrollmentActivity extends AppCompatActivity {
                 date += String.format("%04d",filledYear);
                 date += String.format("%02d", filledMonth);
                 date += String.format("%02d", filledDay);
+              
+                ArrayList<String> subMed=new ArrayList<>();
+                String sub1=autoCompleteTextView0.getText().toString();
+                String sub2=autoCompleteTextView1.getText().toString();
+                String sub3=autoCompleteTextView2.getText().toString();
+                String sub4=autoCompleteTextView3.getText().toString();
+                String sub5=autoCompleteTextView4.getText().toString();
+                if(sub1.length()>0){
+                    subMed.add(sub1);
+                }
+                if(sub2.length()>0){
+                    subMed.add(sub2);
+                }
+                if(sub3.length()>0){
+                    subMed.add(sub3);
+                }
+                if(sub4.length()>0){
+                    subMed.add(sub4);
+                }
+                if(sub5.length()>0){
+                    subMed.add(sub5);
+                }
 
                 // store the data
                 EntryDatabaseHandler handler = EntryDatabaseHandler.getInstance(getApplicationContext());
                 Log.v("Database Size!!!", Integer.toString(handler.getEntryCount()));
                 Entry entry = new Entry(handler.getEntryCount(), diseaseName, hospitalName, Long.parseLong(date));
+                entry.setSubEntries(subMed);
                 handler.addEntry(entry);
                 Log.v("Database Size!!!", Integer.toString(handler.getEntryCount()));
 

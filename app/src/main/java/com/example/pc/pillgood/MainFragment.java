@@ -81,6 +81,14 @@ public class MainFragment extends Fragment {
         rvContent.setLayoutManager(layoutManager);
         return rootView;
     }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            // Refresh your fragment here
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }
+    }
     public void notifyAdapter(){
         EntryDatabaseHandler entryDatabaseHandler=EntryDatabaseHandler.getInstance(getContext());
         entryContentObjects.clear();
@@ -113,6 +121,6 @@ public class MainFragment extends Fragment {
 //        rvContent.setLayoutManager(layoutManager);
 //        rvContent.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-//        adapter.notifyParentRangeChanged(0, adapter.getItemCount());
+        adapter.notifyParentRangeChanged(0, adapter.getItemCount());
     }
 }

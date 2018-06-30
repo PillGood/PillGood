@@ -18,4 +18,5 @@
     <string name="prescription_name_hint">처방전의 이름을 등록해주세요</string>
     <string name="date">처방 날짜</string>
     <string name="enter_prescription">복용하시는 약을 등록해주세요.</string>
+    <string name="hospital_name">병원명</string>
 </resources>

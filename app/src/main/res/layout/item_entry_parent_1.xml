@@ -87,6 +87,7 @@
                 android:layout_margin="4dp"
                 android:textSize="13sp"
                 android:background="@drawable/round_button"
+                android:backgroundTint="#9BE8FF"
                 android:textColor="#FFFFFF"
                 android:padding="4dp"
                 android:text="@string/past_fragment" />

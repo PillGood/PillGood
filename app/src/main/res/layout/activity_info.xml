@@ -116,6 +116,7 @@
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:text="분류" />
 
                 <TextView
@@ -123,7 +124,7 @@
                     android:layout_weight="2.5 "
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="신경계감각기관용 의양품 > 중추신경계용약 > 해열, 진통, 소염제" />
+                    android:text="신경계감각기관용 의약품 > 중추신경계용약 > 해열, 진통, 소염제" />
             </LinearLayout>
 
             <LinearLayout
@@ -139,6 +140,7 @@
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:text="종류" />
 
                 <TextView
@@ -162,6 +164,7 @@
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:text="효능 및 효과" />
 
                 <TextView
